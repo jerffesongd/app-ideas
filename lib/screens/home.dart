@@ -1,9 +1,8 @@
-import 'dart:convert';
-
-import 'package:app_ideas/controller/FolderController.dart';
-import 'package:app_ideas/domain/folder.dart';
-import 'package:app_ideas/domain/project.dart';
+import 'package:app_ideas/constants/UrlApi.dart';
+import 'package:app_ideas/controller/file_controller.dart';
+import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/screens/load-page/LoadDate.dart';
+import 'package:app_ideas/screens/see-idea/see_idea.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +15,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
-  Project project;
+  File _file;
+  String backUrl = UrlApi.urlBase;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    
   }
 
   @override
@@ -31,61 +30,95 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _controller.dispose();
   }
 
-  List<Widget> pastas() {
-    
-    project = Provider.of<FolderController>(context).getProject();
-    List<Widget> pastas = List();
-
-    for (Folder folder in project.tree) {
-      pastas.add(ListTile(
-        title: Card(
-          elevation: 5,
-          child: Row(
+    @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Ideias"),
+          automaticallyImplyLeading: true,
+          leading: IconButton(icon:Icon(Icons.arrow_back, color: Colors.white,),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoadPage(
+                        nextPage: Home(), urlRequest: backUrl, backUrl: null,))),
+            )
+        ),
+        body: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Image.asset(
-                  "assets/img/folder.png",
-                  width: 50,
-                ),
-              ),
               Expanded(
-                  child: AutoSizeText(
-                  folder.name,
-                  style: TextStyle(fontSize: 20),
-                  maxLines: 1,
+                child: ListView(
+                  children: pastas(),
                 ),
               )
             ],
           ),
-        ),
-        onTap: () => {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LoadPage(nextPage: Home(), urlRequest: folder.url)))
-        },
-      ));
+        ));
+  }
+
+  List<Widget> pastas() {
+    _file = Provider.of<FileController>(context).getFile();
+    backUrl = Provider.of<FileController>(context).getBacUrl();
+    List<Widget> pastas = List();
+
+    if (_file.tree != null) {
+      for (File file in _file.tree) {
+        pastas.add(ListTile(
+          title: Card(
+            elevation: 5,
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: showIcon(file),
+                ),
+                Expanded(
+                  child: AutoSizeText(
+                    file.name,
+                    style: TextStyle(fontSize: 20),
+                    maxLines: 1,
+                  ),
+                )
+              ],
+            ),
+          ),
+          onTap: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoadPage(
+                        nextPage: showNextPage(file), urlRequest: file.url, backUrl: backUrl,)))
+          },
+        ));
+      }
     }
 
     return pastas;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Ideas"),
-      ),
-      body: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: ListView(
-                    children: pastas(),
-                  ),
-                )
-              ],
-            ),
-        )
-    );
+
+
+  showNextPage(File file) {
+    if (file.type == "tree") {
+      return Home();
+    } else {
+      return SeeIdea(file: file);
+    }
+  }
+
+  showIcon(File file) {
+    if (file.type == "tree") {
+      return Image.asset(
+        "assets/img/folder.png",
+        width: 50,
+      );
+    } else {
+      return Image.asset(
+        "assets/img/book.png",
+        width: 50,
+      );
+    }
   }
 }

@@ -1,30 +1,36 @@
 import 'dart:async';
 
-import 'package:app_ideas/domain/project.dart';
+import 'package:app_ideas/constants/UrlApi.dart';
+import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/exception/ComunicacaoApiException.dart';
 import 'package:app_ideas/exception/ErrorApi.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class FolderController with ChangeNotifier {
+class FileController with ChangeNotifier {
 
-  Project _project;
+  File _files;
   int _statusCode;
   ErrorApi _erro;
+  String _backUrl;
 
-  Future<Null> carregarIdeias(String urlRequest) async {
+  Future<Null> carregarIdeias(String urlRequest, String backUrl) async {
 
     try {
 
-      String _url = urlRequest;
       var dio = Dio();
+      this._backUrl = backUrl;
+      if (urlRequest == null) {
+        urlRequest = UrlApi.urlBase;
+        backUrl = UrlApi.urlBase;
+      }
 
-      Response response = await dio.get(_url).timeout(Duration(seconds: 60));
+      Response response = await dio.get(urlRequest).timeout(Duration(seconds: 60));
       _statusCode = response.statusCode;
 
       if (_statusCode == 200 ) {
         
-        _project = Project.fromJson(response.data);   
+        _files = File.fromJson(response.data);   
         notifyListeners();
 
       } else {
@@ -40,9 +46,11 @@ class FolderController with ChangeNotifier {
   }
 
 
-  Project getProject () {
-    return _project;
+  File getFile () {
+    return _files;
   }
+
+  String getBacUrl() => _backUrl;
 
   int getStatusCode() => _statusCode;
 

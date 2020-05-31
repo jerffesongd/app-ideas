@@ -1,20 +1,32 @@
-// import 'package:json_annotation/json_annotation.dart';
-// part 'file.g.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'file.g.dart';
 
-// @JsonSerializable()
+@JsonSerializable()
+class File {
 
-// class File {
+  @JsonKey(name:"path")
+  String name;
+  String sha;
+  String url;
+  @JsonKey(name: "tree")
+  List<File> tree;
+  String content;
+  String type;
 
-//   @JsonKey(name:"path")
-//   String name;
-//   String sha;
-//   String url;
-//   @JsonKey(name: "tree")
+  File(this.name, this.sha, this.url, this.content, this.tree, this.type);
 
-//   File(this.name, this.sha, this.url);
+  factory File.fromJson(Map<String, dynamic> json) => _$FileFromJson(json);
 
-//   factory File.fromJson(Map<String, dynamic> json) => _$FileFromJson(json);
+  Map<String, dynamic> toJson() => _$FileToJson(this);
 
-//   Map<String, dynamic> toJson() => _$FileToJson(this);
-  
-// }
+  gerContent() {
+
+    if (tree == null || tree.isEmpty) {
+      return content;
+    } else {
+      return tree;
+    }
+
+  }
+
+}

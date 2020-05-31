@@ -1,6 +1,6 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:app_ideas/ColorsApp.dart';
-import 'package:app_ideas/controller/FolderController.dart';
+import 'package:app_ideas/controller/file_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,11 +11,12 @@ class LoadPage extends StatefulWidget {
 
   final Widget nextPage;
   final String urlRequest;
+  final String backUrl;
 
   @override
   _LoadPageState createState() => _LoadPageState();
 
-  LoadPage({Key key, @required this.nextPage, @required this.urlRequest});
+  LoadPage({Key key, @required this.nextPage, @required this.urlRequest, @required this.backUrl});
 
 }
 
@@ -46,7 +47,7 @@ class _LoadPageState extends State<LoadPage> with AfterLayoutMixin<LoadPage> {
 
   Future<Null> _carregarIdeias() async {
 
-    await Provider.of<FolderController>(context, listen: false).carregarIdeias(widget.urlRequest);
+    await Provider.of<FileController>(context, listen: false).carregarIdeias(widget.urlRequest, widget.backUrl);
     Navigator.push(context, MaterialPageRoute(builder: (context) => widget.nextPage));
 
 
