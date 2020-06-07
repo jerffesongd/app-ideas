@@ -1,4 +1,4 @@
-
+import 'package:app_ideas/constants/UrlApi.dart';
 import 'package:app_ideas/controller/file_controller.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/screens/load-page/LoadDate.dart';
@@ -22,7 +22,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    
   }
 
   @override
@@ -46,9 +45,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       context,
                       MaterialPageRoute(
                           builder: (context) => LoadPage(
-                              nextPage: Home(),
-                              urlRequest: getBackUrl())),
+                              nextPage: Home(), urlRequest: getBackUrl())),
                     ))),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.show_chart),
+          onPressed: () {
+            UrlApi.alice.showInspector();
+          },
+        ),
         body: Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -57,7 +61,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 child: ListView(
                   children: pastas(),
                 ),
-              )
+              ),
             ],
           ),
         ));

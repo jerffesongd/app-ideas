@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alice/alice.dart';
 import 'package:app_ideas/constants/UrlApi.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/exception/ComunicacaoApiException.dart';
@@ -19,11 +20,14 @@ class FileController with ChangeNotifier {
     try {
 
       var dio = Dio();
+      dio.interceptors.add(UrlApi.alice.getDioInterceptor());
       if (urlRequest == null) {
         urlRequest = UrlApi.urlBase;
       }
       _backUrl.add(urlRequest);
-      Response response = await dio.get(urlRequest).timeout(Duration(seconds: 60));
+      Map<String, String> header = {'Accept': 'application/vnd.github.v3+json', 'jerffesongd':''};
+
+      Response response = await dio.get(urlRequest, options: Options(headers: header)).timeout(Duration(seconds: 60));
       _statusCode = response.statusCode;
 
       if (_statusCode == 200 ) {

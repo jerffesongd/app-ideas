@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:after_layout/after_layout.dart';
 import 'package:app_ideas/controller/file_controller.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/screens/home.dart';
