@@ -14,7 +14,7 @@ void main() => runApp(
         ChangeNotifierProvider(create: (_) => FileController()),
       ],
       child: MaterialApp(
-      home: LoadPage(nextPage: Home(),urlRequest: UrlApi.urlBase, backUrl: UrlApi.urlBase,),
+      home: LoadPage(nextPage: Home(), urlRequest: UrlApi.urlBase),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: const MaterialColor(

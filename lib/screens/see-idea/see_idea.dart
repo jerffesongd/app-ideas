@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:app_ideas/constants/UrlApi.dart';
+import 'package:after_layout/after_layout.dart';
 import 'package:app_ideas/controller/file_controller.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/screens/home.dart';
@@ -19,10 +19,8 @@ class SeeIdea extends StatefulWidget {
   _SeeIdeaState createState() => _SeeIdeaState();
 }
 
-class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin {
+class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin, AfterLayoutMixin<SeeIdea> {
   AnimationController _controller;
-
-  String backUrl = UrlApi.urlBase;
 
   @override
   void initState() {
@@ -38,6 +36,12 @@ class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void afterFirstLayout(BuildContext context) async {
+    
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +52,7 @@ class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin {
                 context,
                 MaterialPageRoute(
                     builder: (context) => LoadPage(
-                        nextPage: Home(), urlRequest: backUrl, backUrl: null,))),
+                        nextPage: Home(), urlRequest: getBackUrl()))),
             )
       ),
       body: SafeArea(
@@ -60,7 +64,6 @@ class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin {
 
   String getContentFile() {
 
-    //backUrl = Provider.of<FileController>(context).getBacUrl();
     File _file = Provider.of<FileController>(context).getFile();
     var codec = latin1.fuse(base64);
     var stringBase64 = _file.content;
@@ -73,6 +76,10 @@ class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin {
     }
 
     return textoComleto;
+  }
+
+  String getBackUrl() {
+    return Provider.of<FileController>(context).getBackUrl();
   }
 
 }

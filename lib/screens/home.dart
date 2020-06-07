@@ -1,4 +1,4 @@
-import 'package:app_ideas/constants/UrlApi.dart';
+import 'package:after_layout/after_layout.dart';
 import 'package:app_ideas/controller/file_controller.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/screens/load-page/LoadDate.dart';
@@ -12,16 +12,22 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin, AfterLayoutMixin<Home> {
   AnimationController _controller;
 
   File _file;
-  String backUrl = UrlApi.urlBase;
+  String backUrl;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) async {
+    
   }
 
   @override
@@ -30,20 +36,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _controller.dispose();
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Ideias"),
-          automaticallyImplyLeading: true,
-          leading: IconButton(icon:Icon(Icons.arrow_back, color: Colors.white,),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => LoadPage(
-                        nextPage: Home(), urlRequest: backUrl, backUrl: null,))),
-            )
-        ),
+            title: Text("Ideias"),
+            automaticallyImplyLeading: true,
+            leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoadPage(
+                              nextPage: Home(),
+                              urlRequest: getBackUrl())),
+                    ))),
         body: Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -60,7 +70,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   List<Widget> pastas() {
     _file = Provider.of<FileController>(context).getFile();
-    backUrl = Provider.of<FileController>(context).getBacUrl();
     List<Widget> pastas = List();
 
     if (_file.tree != null) {
@@ -89,7 +98,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 context,
                 MaterialPageRoute(
                     builder: (context) => LoadPage(
-                        nextPage: showNextPage(file), urlRequest: file.url, backUrl: backUrl,)))
+                        nextPage: showNextPage(file), urlRequest: file.url)))
           },
         ));
       }
@@ -97,8 +106,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     return pastas;
   }
-
-
 
   showNextPage(File file) {
     if (file.type == "tree") {
@@ -120,5 +127,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         width: 50,
       );
     }
+  }
+
+  String getBackUrl() {
+    return Provider.of<FileController>(context).getBackUrl();
   }
 }

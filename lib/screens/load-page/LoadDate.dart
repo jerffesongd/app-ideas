@@ -11,12 +11,11 @@ class LoadPage extends StatefulWidget {
 
   final Widget nextPage;
   final String urlRequest;
-  final String backUrl;
 
   @override
   _LoadPageState createState() => _LoadPageState();
 
-  LoadPage({Key key, @required this.nextPage, @required this.urlRequest, @required this.backUrl});
+  LoadPage({Key key, @required this.nextPage, @required this.urlRequest});
 
 }
 
@@ -47,7 +46,7 @@ class _LoadPageState extends State<LoadPage> with AfterLayoutMixin<LoadPage> {
 
   Future<Null> _carregarIdeias() async {
 
-    await Provider.of<FileController>(context, listen: false).carregarIdeias(widget.urlRequest, widget.backUrl);
+    await Provider.of<FileController>(context, listen: false).carregarIdeias(widget.urlRequest);
     Navigator.push(context, MaterialPageRoute(builder: (context) => widget.nextPage));
 
 

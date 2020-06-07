@@ -12,19 +12,17 @@ class FileController with ChangeNotifier {
   File _files;
   int _statusCode;
   ErrorApi _erro;
-  String _backUrl;
+  var _backUrl = [];
 
-  Future<Null> carregarIdeias(String urlRequest, String backUrl) async {
+  Future<Null> carregarIdeias(String urlRequest) async {
 
     try {
 
       var dio = Dio();
-      this._backUrl = backUrl;
       if (urlRequest == null) {
         urlRequest = UrlApi.urlBase;
-        backUrl = UrlApi.urlBase;
       }
-
+      _backUrl.add(urlRequest);
       Response response = await dio.get(urlRequest).timeout(Duration(seconds: 60));
       _statusCode = response.statusCode;
 
@@ -50,7 +48,16 @@ class FileController with ChangeNotifier {
     return _files;
   }
 
-  String getBacUrl() => _backUrl;
+  String getBackUrl() {
+  
+    if (_backUrl.length > 1) {
+      _backUrl.removeLast();
+       return _backUrl.removeLast();
+    } else {
+      return _backUrl.removeLast();
+    }
+    
+  }
 
   int getStatusCode() => _statusCode;
 
