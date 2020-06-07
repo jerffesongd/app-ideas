@@ -1,4 +1,4 @@
-import 'package:after_layout/after_layout.dart';
+
 import 'package:app_ideas/controller/file_controller.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/screens/load-page/LoadDate.dart';
@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin, AfterLayoutMixin<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   File _file;
@@ -22,11 +22,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin, AfterL
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    
-  }
-
-  @override
-  void afterFirstLayout(BuildContext context) async {
     
   }
 

@@ -19,7 +19,7 @@ class SeeIdea extends StatefulWidget {
   _SeeIdeaState createState() => _SeeIdeaState();
 }
 
-class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin, AfterLayoutMixin<SeeIdea> {
+class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   @override
@@ -33,12 +33,6 @@ class _SeeIdeaState extends State<SeeIdea> with SingleTickerProviderStateMixin, 
   void dispose() {
     super.dispose();
     _controller.dispose();
-  }
-
-  @override
-  void afterFirstLayout(BuildContext context) async {
-    
-
   }
 
   @override
