@@ -47,12 +47,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           builder: (context) => LoadPage(
                               nextPage: Home(), urlRequest: getBackUrl())),
                     ))),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.show_chart),
-          onPressed: () {
-            UrlApi.alice.showInspector();
-          },
-        ),
         body: Container(
           padding: EdgeInsets.all(16),
           child: Column(
