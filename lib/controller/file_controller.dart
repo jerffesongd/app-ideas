@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:alice/alice.dart';
 import 'package:app_ideas/constants/UrlApi.dart';
+import 'package:app_ideas/constants/github.dart';
 import 'package:app_ideas/domain/file.dart';
 import 'package:app_ideas/exception/ComunicacaoApiException.dart';
 import 'package:app_ideas/exception/ErrorApi.dart';
@@ -25,7 +26,7 @@ class FileController with ChangeNotifier {
         urlRequest = UrlApi.urlBase;
       }
       _backUrl.add(urlRequest);
-      Map<String, String> header = {'Accept': 'application/vnd.github.v3+json', 'jerffesongd':''};
+      Map<String, String> header = {'Accept': 'application/vnd.github.v3+json', 'jerffesongd':GitHub.token};
 
       Response response = await dio.get(urlRequest, options: Options(headers: header)).timeout(Duration(seconds: 60));
       _statusCode = response.statusCode;
@@ -39,7 +40,7 @@ class FileController with ChangeNotifier {
           _erro = ErrorApi(response.statusCode, response.statusMessage, response.data, response.realUri.origin );
           throw ComunicacaoApiException.withErroIcon(_erro, (Icon(Icons.vpn_key, color: Colors.red)));
       }
-
+      
     } on TimeoutException catch (ti) {
       print("Erro: $ti.message");
       throw ComunicacaoApiException.withMessageIcon("Não foi possível se comunicar com o servidor", (Icon(Icons.access_time, color: Colors.red)));
